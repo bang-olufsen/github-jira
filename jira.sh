@@ -13,18 +13,16 @@ status () {
  fi
 }
 
-pull_request_title() {
+jira_number() {
   if [ "$SHIPPABLE" = "true" ]; then
     if [ "$IS_PULL_REQUEST" = "true" ]; then
-      curl -H "Content-Type: application/json" -H "Authorization: token $GITHUB_TOKEN" -H "User-Agent: bangolufsen/jira" -X GET $GITHUB_API/pulls/$PULL_REQUEST | grep -Po '"title":(\d*?,|.*?[^\\]")' | cut -d : -f2
+      curl -H "Content-Type: application/json" -H "Authorization: token $GITHUB_TOKEN" -H "User-Agent: bangolufsen/jira" -X GET $GITHUB_API/pulls/$PULL_REQUEST | grep -Po '"title":"[A-z]+-[0-9]+' | cut -f4 -d '"'
     fi
   fi
 }
 
-JIRA_NUMBER=`pull_request_title | grep -o -E '[A-Z]+-[0-9]+'`
-
-if [ "$JIRA_NUMBER" != "" ]; then
-  status "success" "JIRA number $JIRA_NUMBER found in pull request title"
+if [ "`jira_number`" != "" ]; then
+  status "success" "JIRA number found in pull request title"
 else
-  status "failure" "No JIRA number found in pull request title"
+  status "failure" "JIRA number missing in start of pull request title e.g. 'ABC-123 <title>'"
 fi
