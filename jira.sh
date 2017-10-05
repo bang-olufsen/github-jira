@@ -16,7 +16,7 @@ status () {
 jira_number() {
   if [ "$SHIPPABLE" = "true" ]; then
     if [ "$IS_PULL_REQUEST" = "true" ]; then
-      curl -H "Content-Type: application/json" -H "Authorization: token $GITHUB_TOKEN" -H "User-Agent: bangolufsen/jira" -X GET $GITHUB_API/pulls/$PULL_REQUEST | grep -Po '"title":"[A-z]+-[0-9]+' | cut -f4 -d '"'
+      curl -H "Content-Type: application/json" -H "Authorization: token $GITHUB_TOKEN" -H "User-Agent: bangolufsen/jira" -X GET $GITHUB_API/pulls/$PULL_REQUEST | grep -Po '"title":"[A-Z]+-[0-9]+' | cut -f4 -d '"'
     fi
   fi
 }
