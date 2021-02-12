@@ -16,7 +16,7 @@ status() {
 }
 
 PULL_REQUEST_STATUS=$(curl -s -H "Content-Type: application/json" -H "Authorization: token $GITHUB_TOKEN" -H "User-Agent: $REPO_FULL_NAME" -X GET "$GITHUB_API/pulls/$PULL_REQUEST")
-JIRA_NUMBER=$(echo "$PULL_REQUEST_STATUS" | jq -r '.title' | grep -Po '[A-Z]+-[0-9]+')
+JIRA_NUMBER=$(echo "$PULL_REQUEST_STATUS" | jq -r '.title' | grep -Po '[A-Z]+-[0-9]+' || true)
 STATUSES_URL=$(echo "$PULL_REQUEST_STATUS" | jq -r '.statuses_url')
 
 if [ "$JIRA_NUMBER" != "" ]; then
